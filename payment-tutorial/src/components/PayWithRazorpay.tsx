@@ -52,7 +52,7 @@ const PayWithRazorpay = () => {
 
             try {
               const res = await fetch(
-                `http://localhost:3000/api/razorpay/verify`,
+                `http://localhost:1337/api/orders/razorpay/verify-payment`,
                 {
                   method: "POST",
                   headers: {
