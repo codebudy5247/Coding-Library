@@ -6,25 +6,31 @@
  */
 
 function reverseWords(input) {
-    let reversedString = "";
-    let wordStart = 0;
-  
-    for (let i = 0; i <= input.length; i++) {
-      if (i === input.length || input[i] === " ") {
-        for (let j = i - 1; j >= wordStart; j--) {
-          reversedString += input[j];
-        }
-        if (i < input.length) {
-          reversedString += " ";
-        }
-        wordStart = i + 1;
+  let reversedString = "";
+  let wordStart = 0;
+
+  for (let i = 0; i <= input.length; i++) {
+    if (i === input.length || input[i] === " ") {
+      for (let j = i - 1; j >= wordStart; j--) {
+        reversedString += input[j];
       }
+      if (i < input.length) {
+        reversedString += " ";
+      }
+      wordStart = i + 1;
     }
-  
-    return reversedString;
   }
-  
-  const output = reverseWords("The quick brown fox jumps over the lazy dog.");
-  
-  console.log(output);
-  
+
+  return reversedString;
+}
+
+// USing js function
+function reverseWords2(str) {
+  return str
+    .split(" ")
+    .map((val) => val.split("").reverse().join(""))
+    .join(" ");
+}
+
+const output = reverseWords2("The quick brown fox jumps over the lazy dog.");
+console.log(output);
