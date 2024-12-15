@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bubbling/Capturing</title>
+    <style>
+      #div1,
+      #div4 {
+        background-color: lightgreen;
+        padding: 24px;
+        border: 1px solid black;
+      }
+
+      #div2,
+      #div5 {
+        background-color: yellow;
+        padding: 18px;
+        border: 1px solid black;
+      }
+
+      #div3,
+      #div6 {
+        background-color: orange;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Event bubbling</h1>
+    <div id="div1">
+      Component 1
+      <div id="div2">
+        component 2
+        <div id="div3">component 3</div>
+      </div>
+    </div>
+
+    <h1>Event capturing</h1>
+
+    <div id="div4">
+      Component 1
+      <div id="div5">
+        component 2
+        <div id="div6">component 3</div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
