@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { db } from "../utils";
+import { db } from "../../database";
 import { compareSync } from "bcrypt";
 import { BadRequestException } from "../exceptions/bad-requests";
 import { ErrorCodes } from "../exceptions/root";
