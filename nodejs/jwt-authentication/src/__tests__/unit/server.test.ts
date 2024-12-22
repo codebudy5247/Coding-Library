@@ -2,21 +2,16 @@ import supertest from "supertest";
 import { createServer } from "../../server";
 
 describe("server", () => {
-  it("health check returns 200", async () => {
-    await supertest(createServer())
-      .get("/api/v1/health")
-      .expect(200)
-      .then((res) => {
-        expect(res.body.ok).toBe(true);
-      });
+  const server = createServer();
+  const request = supertest(server);
+
+  it("should return 200 for the health check endpoint", async () => {
+    const res = await request.get("/api/v1/health").expect(200);
+    expect(res.body.ok).toBe(true);
   });
 
-  it("message endpoint says hello", async () => {
-    await supertest(createServer())
-      .get("/api/v1/health/message/jared")
-      .expect(200)
-      .then((res) => {
-        expect(res.body).toEqual({ message: "hello jared" });
-      });
+  it("should return a greeting message for the message endpoint", async () => {
+    const res = await request.get("/api/v1/health/message/jared").expect(200);
+    expect(res.body).toEqual({ message: "hello jared" });
   });
 });

@@ -22,5 +22,7 @@ export const register = async (req: Request, res: Response) => {
       password: hashSync(password, 10),
     },
   });
-  res.json(user);
+
+  const { password: _, ...userWithoutPassword } = user;
+  res.json(userWithoutPassword);
 };
