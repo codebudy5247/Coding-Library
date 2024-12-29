@@ -30,3 +30,7 @@ export const login = async (req: Request, res: Response) => {
 
   res.json({ access_token });
 };
+
+export const refreshToken = async (req: Request, res: Response) => {
+
+}

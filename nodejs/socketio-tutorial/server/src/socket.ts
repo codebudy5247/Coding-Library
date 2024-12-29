@@ -47,3 +47,52 @@ class SocketService {
 }
 
 export default SocketService;
+
+// import { Server as HttpServer } from "http";
+// import WebSocket, { Server as WebSocketServer } from "ws";
+
+// class WebSocketService {
+//   private _wss: WebSocketServer;
+
+//   constructor(server: HttpServer) {
+//     // Create a WebSocket server using the provided HTTP server
+//     this._wss = new WebSocket.Server({ server });
+
+//     // Initialize WebSocket listeners
+//     this.initListeners();
+//   }
+
+//   private initListeners() {
+//     this._wss.on("connection", (ws: WebSocket) => {
+//       console.log("New WebSocket connection established");
+
+//       // Listen for incoming messages from clients
+//       ws.on("message", (message: string) => {
+//         console.log("Received message from client:", message);
+
+//         // Broadcast the message to all connected clients
+//         this.broadcastMessage(message);
+//       });
+
+//       // Handle client disconnecting
+//       ws.on("close", () => {
+//         console.log("WebSocket connection closed");
+//       });
+//     });
+//   }
+
+//   private broadcastMessage(message: string) {
+//     // Broadcast the message to all clients except the sender
+//     this._wss.clients.forEach((client: WebSocket) => {
+//       if (client.readyState === WebSocket.OPEN) {
+//         client.send(message);
+//       }
+//     });
+//   }
+
+//   get wss() {
+//     return this._wss;
+//   }
+// }
+
+// export default WebSocketService;

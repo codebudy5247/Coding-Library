@@ -37,6 +37,7 @@ describe("Auth Routes", () => {
       .expect(expectedStatusCode);
   };
 
+  //register tests 
   describe("User Registration POST /v1/auth/register", () => {
     it("should return 200 and successfully register a user with valid data", async () => {
       const response = await testUserRegistration(defaultTestUser, 200);
@@ -89,4 +90,7 @@ describe("Auth Routes", () => {
       await testUserRegistration(noNumbersPassword, 422);
     });
   });
+
+  // login tests
+  
 });
