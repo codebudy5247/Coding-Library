@@ -1,0 +1,11 @@
+POST http://localhost:4000/api/v1/auth/refresh
+Content-Type: application/json
+
+# {
+#     "email": "test4@example.com",
+#     "password": "12345ad"
+# }
+
+{
+    "refresh_token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZjE2ODQ3Yi1jOWNjLTQxZDEtOGVlOS01MjEyM2NmY2Y5MDciLCJpYXQiOjE3MzU3NDg0MDgsImV4cCI6MTczNTc1MDIwOH0.MbEqGM6xIsUC5-BrP7e4_7U2ZrT-Y1RkMWxxuFLPbjjMqSpuaNpJCVKSXo0iDXzjLryfHX3HCuIAY2dIDk-zQATZLwEs9D4t_DQ2whRGdNEwaXZz2qGySHj251Sngw3sQnnhYiTHpf9Ymbbo--8c-SW_DEJMqeAr_DA5j1UWU55dof2kwvLa2m2QmN_0nommhYYRQy8ISOrcyPtP36vUqs8EL_-C2efBHpf99hYuFG7QzN-9EeUVTIHU0iAcTZWfSpUSuvnT_tf-XlAsWH5OtNBQ3y8CMY-Ikmm7FZosGb4z6BeDq7EFjkkLHL1Tw9JohDSythcBTKeXTEyljWFuDw"
+}
