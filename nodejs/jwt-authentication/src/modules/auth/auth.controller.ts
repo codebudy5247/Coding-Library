@@ -72,3 +72,9 @@ export const refreshToken = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const me = async (req: Request, res: Response) => {
+  const user = res.locals.user;
+  res.json(user);
+};
+
