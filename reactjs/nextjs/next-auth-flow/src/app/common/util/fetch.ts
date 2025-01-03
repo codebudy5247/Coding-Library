@@ -1,80 +1,49 @@
+"use server";
+
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import { API_URL } from "../constants/api";
 import { getErrorMessage } from "./errors";
-import { AUTHENTICATION_COOKIE } from "../../(auth)/auth-cookie";
-
-export const getHeaders = () => ({
-  Cookie: cookies().toString(),
-});
+import { AUTHENTICATION_COOKIE,REFRESH_COOKIE } from "../../(auth)/auth-cookie";
+import { setCookie } from "@/app/(auth)/signin/signin";
 
 // Refresh token
 const refreshAccessToken = async () => {
-  const refreshToken = cookies().get("access_token");
-  if (!refreshToken) {
-    throw new Error("Refresh token not found");
-  }
-  const res = await fetch(`${API_URL}/auth/refresh-token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ refresh_token: refreshToken.value }),
-    credentials: "include",
-  });
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.error || "Unable to refresh token");
-  }
-  const { access_token } = await res.json();
-  cookies().set({
-    name: AUTHENTICATION_COOKIE,
-    value: access_token,
-    secure: true,
-    httpOnly: true,
-    expires: new Date(jwtDecode(access_token).exp! * 1000),
-  });
-  return { access_token };
-};
-
-const authenticatedReq = async (input: RequestInfo, init?: RequestInit) => {
-  let response = await fetch(input, init);
-  if (response.status === 401) {
-    try {
-      const { access_token } = await refreshAccessToken();
-      cookies().set({
-        name: AUTHENTICATION_COOKIE,
-        value: access_token,
-        secure: true,
-        httpOnly: true,
-        expires: new Date(jwtDecode(access_token).exp! * 1000),
-      });
-      const updatedHeaders = {
-        ...init?.headers,
-        Authorization: `Bearer ${access_token}`,
-      };
-      response = await fetch(input, { ...init, headers: updatedHeaders });
-    } catch (error) {
-      console.error("Token refresh failed:", error);
-      throw new Error("Unauthorized. Please log in again.");
+  try {
+    const refreshToken = cookies().get(REFRESH_COOKIE)?.value;
+    if (!refreshToken) {
+      throw new Error("Refresh token not found.");
     }
+    const res = await fetch(`${API_URL}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!res.ok) {
+      const parsedRes = await res.json().catch(() => ({}));
+      return { error: getErrorMessage(parsedRes) || "Unknown error occurred." };
+    }
+    const { access_token } = await res.json();
+    if (!access_token) {
+      throw new Error("Access token not found in the response.");
+    }
+    setCookie(AUTHENTICATION_COOKIE, access_token);
+    return { access_token };
+  } catch (error) {
+    console.error("Failed to refresh access token:", error);
+    return { error: error || "Failed to refresh access token." };
   }
-  return response;
 };
 
-// POST request with automatic token refresh
+// Post request
 export const post = async (path: string, data: FormData | object) => {
   const body = data instanceof FormData ? Object.fromEntries(data) : data;
-
-  const res = await authenticatedReq(`${API_URL}/${path}`, {
+  const res = await fetch(`${API_URL}/${path}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...getHeaders(),
-    },
     body: JSON.stringify(body),
   });
-
   const parsedRes = await res.json();
   if (!res.ok) {
     return { error: getErrorMessage(parsedRes) };
@@ -82,47 +51,39 @@ export const post = async (path: string, data: FormData | object) => {
   return { error: "", data: parsedRes };
 };
 
-// GET request with automatic token refresh
+// Get request
 export const get = async <T>(
   path: string,
   tags?: string[],
   params?: URLSearchParams
-): Promise<T> => {
-  const url = params ? `${API_URL}/${path}?` + params : `${API_URL}/${path}`;
+): Promise<T | { error: string }> => {
+  const constructUrl = () =>
+    params ? `${API_URL}/${path}?${params}` : `${API_URL}/${path}`;
 
-  const res = await authenticatedReq(url, {
-    headers: {
-      ...getHeaders(),
-    },
-    next: { tags },
-  });
+  const fetchWithAuth = async (token: string | undefined): Promise<Response> =>
+    fetch(constructUrl(), {
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      next: { tags },
+    });
 
-  return res.json() as T;
+  let token = cookies().get(AUTHENTICATION_COOKIE)?.value;
+  let res = await fetchWithAuth(token);
+  if (!res.ok && res.status === 401) {
+    const refreshResult = await refreshAccessToken();
+    if (refreshResult?.access_token) {
+      token = refreshResult.access_token;
+      res = await fetchWithAuth(token);
+    } else {
+      return { error: "Unable to refresh access token" };
+    }
+  }
+  const parsedRes = await res.json();
+  if (!res.ok) {
+    return { error: getErrorMessage(parsedRes) };
+  }
+  return parsedRes as T;
 };
 
-// export const post = async (path: string, data: FormData | object) => {
-//   const body = data instanceof FormData ? Object.fromEntries(data) : data;
-//   const res = await fetch(`${API_URL}/${path}`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json", ...getHeaders() },
-//     body: JSON.stringify(body),
-//   });
-//   const parsedRes = await res.json();
-//   if (!res.ok) {
-//     return { error: getErrorMessage(parsedRes) };
-//   }
-//   return { error: "", data: parsedRes };
-// };
-
-// export const get = async <T>(
-//   path: string,
-//   tags?: string[],
-//   params?: URLSearchParams
-// ) => {
-//   const url = params ? `${API_URL}/${path}?` + params : `${API_URL}/${path}`;
-//   const res = await fetch(url, {
-//     headers: { ...getHeaders() },
-//     next: { tags },
-//   });
-//   return res.json() as T;
-// };
