@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { db } from "../../database";
 import { compareSync } from "bcrypt";
 import { BadRequestException } from "../exceptions/bad-requests";
@@ -6,8 +6,11 @@ import { ErrorCodes } from "../exceptions/root";
 import { LoginSchema } from "./auth.schema";
 import { NotFoundException } from "../exceptions/not-found";
 import { signJwt, verifyJwt } from "../utils";
+import { UnauthorizedException } from "../exceptions/unauthorized";
 
-let accessTokenExpiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN!;
+// let accessTokenExpiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN || 15
+let refreshTokenExpiresIn = process.env.REFRESH_TOKEN_EXPIRES_IN || 60
+let accessTokenExpiresIn = 2
 
 export const login = async (req: Request, res: Response) => {
   LoginSchema.parse(req.body);
@@ -18,6 +21,9 @@ export const login = async (req: Request, res: Response) => {
     throw new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND);
 
   if (!compareSync(password, user.password))
+  //compareSync(password, user.password) uses synchronous bcrypt comparison which can block the event loop. Consider using the 
+  //asynchronous version compare instead.
+
     throw new BadRequestException(
       "Incorrect password",
       ErrorCodes.INCORRECT_PASSWORD
@@ -28,12 +34,20 @@ export const login = async (req: Request, res: Response) => {
     expiresIn: `${accessTokenExpiresIn}m`,
   });
 
-  res.json({ access_token });
+  // Sign the refresh token
+  const refresh_token = signJwt({ sub: user.id }, 'refreshTokenPrivateKey', {
+    expiresIn: `${refreshTokenExpiresIn}d`,
+  });
+
+  res.json({ access_token,refresh_token });
 };
 
-export const refreshToken = async (req: Request, res: Response) => {
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { refresh_token } = req.body;
-
   try {
     // Verify the refresh token
     const payload = verifyJwt<{ sub: string }>(
@@ -47,17 +61,23 @@ export const refreshToken = async (req: Request, res: Response) => {
     // }
 
     if (!payload) {
-      return res.status(401).json({
-        error: ErrorCodes.INVALID_REFRESH_TOKEN,
-      });
+      return next(
+        new UnauthorizedException(
+          "Unauthorized: Invalid token",
+          ErrorCodes.UNAUTHORIZED
+        )
+      );
     }
 
     // Find the user by ID
     const user = await db.user.findFirst({ where: { id: payload.sub } });
     if (!user) {
-      return res.status(404).json({
-        error: ErrorCodes.USER_NOT_FOUND,
-      });
+      return next(
+        new UnauthorizedException(
+          "Unauthorized: User not found",
+          ErrorCodes.UNAUTHORIZED
+        )
+      );
     }
 
     // Sign the access token
@@ -67,14 +87,19 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     res.json({ access_token });
   } catch (error) {
-    res.status(500).json({
-      error: ErrorCodes.INTERNAL_EXCEPTION,
-    });
+    console.log(error);
+    return next(
+      new UnauthorizedException(
+        "Unauthorized: Authentication failed",
+        ErrorCodes.UNAUTHORIZED
+      )
+    );
   }
 };
 
 export const me = async (req: Request, res: Response) => {
   const user = res.locals.user;
+  if (!user)
+    throw new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND);
   res.json(user);
 };
-
