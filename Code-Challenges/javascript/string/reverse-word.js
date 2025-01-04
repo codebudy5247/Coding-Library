@@ -1,8 +1,8 @@
 /**
  * You are given a string of varying word counts. The goal of the function is to reverse every
  * word in the string and return it.
- * input:  'The quick brown fox jumps over the lazy dog.'
- * output: 'ehT kciuq nworb xof spmuj revo eht yzal .god'
+ * input:  'The quick brown fox.'
+ * output: 'ehT kciuq nworb .xof'
  */
 
 function reverseWords(input) {
@@ -32,5 +32,5 @@ function reverseWords2(str) {
     .join(" ");
 }
 
-const output = reverseWords2("The quick brown fox jumps over the lazy dog.");
+const output = reverseWords2("The quick brown fox.");
 console.log(output);
