@@ -423,8 +423,147 @@ const pattern17 = (n) => {
   let string = "";
   for (let i = 0; i < n; i++) {
     let spaces = " ".repeat(n - i - 1);
-    let left = "";
+    let chars = "";
     for (let j = 0; j <= i; j++) {
-      left += String.fromCharCode(65 + j);
+      chars += String.fromCharCode(65 + j);
     }
-    let right = left.slice(0, -1).split
+    for (let j = i - 1; j >= 0; j--) {
+      chars += String.fromCharCode(65 + j);
+    }
+    string += spaces + chars + "\n";
+  }
+  return string;
+};
+console.log(pattern17(6));
+
+/*
+Pattern 18
+ F
+ E F
+ D E F
+ C D E F
+ B C D E F
+ A B C D E F
+
+*/
+
+const pattern18 = (n) => {
+  let string = "";
+  for (let i = 0; i < n; i++) {
+    let spaces = " ".repeat(i);
+    let chars = "";
+    for (let j = i; j < n; j++) {
+      chars += String.fromCharCode(65 + j) + " ";
+    }
+    string += spaces + chars + "\n";
+  }
+  return string;
+}
+
+console.log(pattern18(6));
+
+/**
+Pattern 19
+
+************
+*****  *****
+****    ****
+***      ***
+**        **
+*          *
+*          *
+**        **
+***      ***
+****    ****
+*****  *****
+************
+
+ */
+
+const pattern19 = (n) => {
+  let string = "";
+  for (let i = 0; i < n; i++) {
+    let stars = "*".repeat(n - i);
+    let spaces = " ".repeat(2 * i);
+    string += stars + spaces + stars + "\n";
+  }
+  for (let i = n - 1; i >= 0; i--) {
+    let stars = "*".repeat(n - i);
+    let spaces = " ".repeat(2 * i);
+    string += stars + spaces + stars + "\n";
+  }
+  return string
+}
+
+console.log(pattern19(6));
+
+/**
+ Pattern 20
+*    *
+**  **
+******
+**  **
+*    *
+
+ */
+
+const pattern20 = (n) => {
+  let string = "";
+  for (let i = 1; i <= n; i++) {
+    let stars = "*".repeat(i);
+    let spaces = " ".repeat(2 * (n - i));
+    string += stars + spaces + stars + "\n";
+  }
+  for (let i = n - 1; i > 0; i--) {
+    let stars = "*".repeat(i);
+    let spaces = " ".repeat(2 * (n - i));
+    string += stars + spaces + stars + "\n";
+  }
+  return string;
+}
+
+console.log(pattern20(3));
+
+/**
+Pattern 21
+***
+* *
+***
+
+ */
+
+const pattern21 = (n) => {
+  let string = "";
+  for (let i = 1; i <= n; i++) {
+    let stars = "*".repeat(3);
+    if (i === 2) {
+      stars = "* *";
+    }
+    string += stars + "\n";
+  }
+  return string;
+}
+console.log(pattern21(3));
+
+/**
+Pattern 22
+3 3 3 3 3 
+3 2 2 2 3 
+3 2 1 2 3 
+3 2 2 2 3 
+3 3 3 3 3
+
+ */
+
+const pattern22 = (n) => {
+  let string = "";
+  for (let i = 1; i <= n; i++) {
+    let row = "";
+    for (let j = 1; j <= n; j++) {
+      row += Math.max(i, j) + " ";
+    }
+    string += row + "\n";
+  }
+  return string;
+}
+console.log(pattern22(5));
