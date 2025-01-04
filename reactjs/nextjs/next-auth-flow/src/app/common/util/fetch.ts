@@ -8,28 +8,46 @@ import {
 import { setCookie } from "@/app/(auth)/signin/signin";
 
 // Refresh token
-const refreshAccessToken = async () => {
+// const refreshAccessToken = async () => {
+//   try {
+//     const refreshToken = cookies().get(REFRESH_COOKIE)?.value;
+//     if (!refreshToken) {
+//       throw new Error("Refresh token not found.");
+//     }
+//     const res = await fetch(`${API_URL}/auth/refresh`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ refresh_token: refreshToken }),
+//     });
+//     if (!res.ok) {
+//       const parsedRes = await res.json().catch(() => ({}));
+//       return { error: getErrorMessage(parsedRes) || "Unknown error occurred." };
+//     }
+//     const { access_token } = await res.json();
+//     if (!access_token) {
+//       throw new Error("Access token not found in the response.");
+//     }
+//     setCookie(AUTHENTICATION_COOKIE, access_token);
+//     return { access_token };
+//   } catch (error) {
+//     console.error("Failed to refresh access token:", error);
+//     return { error: error || "Failed to refresh access token." };
+//   }
+// };
+export const refreshAccessToken = async () => {
   try {
-    const refreshToken = cookies().get(REFRESH_COOKIE)?.value;
-    if (!refreshToken) {
-      throw new Error("Refresh token not found.");
-    }
-    const res = await fetch(`${API_URL}/auth/refresh`, {
+    const res = await fetch("/api/auth/refresh", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refresh_token: refreshToken }),
     });
+
     if (!res.ok) {
       const parsedRes = await res.json().catch(() => ({}));
-      return { error: getErrorMessage(parsedRes) || "Unknown error occurred." };
+      return { error: parsedRes.error || "Failed to refresh access token." };
     }
+
     const { access_token } = await res.json();
-    if (!access_token) {
-      throw new Error("Access token not found in the response.");
-    }
-    setCookie(AUTHENTICATION_COOKIE, access_token);
     return { access_token };
   } catch (error) {
     console.error("Failed to refresh access token:", error);

@@ -1,3 +1,10 @@
+/*
+Calculates the minimum number of swaps required to sort an array of integers in ascending order
+I/P: [7, 1, 2, 3, 4, 5, 8, 6]
+O/P: 5
+
+*/
+
 function minimumSwaps(arr) {
   let count = 0;
   for (let i = 0; i < arr.length; i++) {
