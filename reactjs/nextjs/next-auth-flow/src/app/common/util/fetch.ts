@@ -1,10 +1,10 @@
-"use server";
-
 import { cookies } from "next/headers";
-import { jwtDecode } from "jwt-decode";
 import { API_URL } from "../constants/api";
 import { getErrorMessage } from "./errors";
-import { AUTHENTICATION_COOKIE,REFRESH_COOKIE } from "../../(auth)/auth-cookie";
+import {
+  AUTHENTICATION_COOKIE,
+  REFRESH_COOKIE,
+} from "../../(auth)/auth-cookie";
 import { setCookie } from "@/app/(auth)/signin/signin";
 
 // Refresh token
@@ -71,9 +71,11 @@ export const get = async <T>(
 
   let token = cookies().get(AUTHENTICATION_COOKIE)?.value;
   let res = await fetchWithAuth(token);
+
   if (!res.ok && res.status === 401) {
     const refreshResult = await refreshAccessToken();
-    if (refreshResult?.access_token) {
+
+    if (refreshResult.access_token) {
       token = refreshResult.access_token;
       res = await fetchWithAuth(token);
     } else {
@@ -86,4 +88,3 @@ export const get = async <T>(
   }
   return parsedRes as T;
 };
-

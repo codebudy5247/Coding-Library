@@ -27,28 +27,7 @@ export default async function login(values: z.infer<typeof LoginSchema>) {
   if (!res.ok) {
     return { error: getErrorMessage(parsedRes) };
   }
-  // cookies().set({
-  //   name: AUTHENTICATION_COOKIE,
-  //   value: parsedRes.access_token,
-  //   secure: true,
-  //   httpOnly: true,
-  //   expires: new Date(jwtDecode(parsedRes.access_token).exp! * 1000),
-  // });
   setCookie(AUTHENTICATION_COOKIE, parsedRes.access_token);
   setCookie(REFRESH_COOKIE, parsedRes.refresh_token);
   redirect("/");
 }
-
-// const setAuthCookie = (response: Response) => {
-//   const setCookieHeader = response.headers.get("Set-Cookie");
-//   if (setCookieHeader) {
-//     const token = setCookieHeader.split(";")[0].split("=")[1];
-//     cookies().set({
-//       name: AUTHENTICATION_COOKIE,
-//       value: token,
-//       secure: true,
-//       httpOnly: true,
-//       expires: new Date(jwtDecode(token).exp! * 1000),
-//     });
-//   }
-// };
