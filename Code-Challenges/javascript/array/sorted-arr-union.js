@@ -8,7 +8,6 @@ arr1[] = {1,2,3,4,5}
 arr2[] = {2,3,4,4,5}
 Output:
 {1,2,3,4,5}
-
 Explanation: 
 Common Elements in arr1 and arr2  are:  2,3,4,5
 Distnict Elements in arr1 are : 1
@@ -30,66 +29,66 @@ Union of arr1 and arr2 is {1,2,3,4,5,6,7,8,9,10,11,12}
 */
 
 // Solution 1
-function sortedArrUnion(arr1, arr2) {
-  let mergedArr = [];
-  let i = 0;
-  let j = 0;
+// function sortedArrUnion(arr1, arr2) {
+//   let mergedArr = [];
+//   let i = 0;
+//   let j = 0;
 
-  // Merge the two sorted arrays while removing duplicates
-  while (i < arr1.length && j < arr2.length) {
-    if (arr1[i] < arr2[j]) {
-      if (
-        mergedArr.length === 0 ||
-        mergedArr[mergedArr.length - 1] !== arr1[i]
-      ) {
-        mergedArr.push(arr1[i]);
-      }
-      i++;
-    } else if (arr1[i] > arr2[j]) {
-      if (
-        mergedArr.length === 0 ||
-        mergedArr[mergedArr.length - 1] !== arr2[j]
-      ) {
-        mergedArr.push(arr2[j]);
-      }
-      j++;
-    } else {
-      // Handle equal elements
-      if (
-        mergedArr.length === 0 ||
-        mergedArr[mergedArr.length - 1] !== arr1[i]
-      ) {
-        mergedArr.push(arr1[i]);
-      }
-      i++;
-      j++;
-    }
-  }
+//   // Merge the two sorted arrays while removing duplicates
+//   while (i < arr1.length && j < arr2.length) {
+//     if (arr1[i] < arr2[j]) {
+//       if (
+//         mergedArr.length === 0 ||
+//         mergedArr[mergedArr.length - 1] !== arr1[i]
+//       ) {
+//         mergedArr.push(arr1[i]);
+//       }
+//       i++;
+//     } else if (arr1[i] > arr2[j]) {
+//       if (
+//         mergedArr.length === 0 ||
+//         mergedArr[mergedArr.length - 1] !== arr2[j]
+//       ) {
+//         mergedArr.push(arr2[j]);
+//       }
+//       j++;
+//     } else {
+//       // Handle equal elements
+//       if (
+//         mergedArr.length === 0 ||
+//         mergedArr[mergedArr.length - 1] !== arr1[i]
+//       ) {
+//         mergedArr.push(arr1[i]);
+//       }
+//       i++;
+//       j++;
+//     }
+//   }
 
-  // Handle remaining elements in arr1
-  while (i < arr1.length) {
-    if (mergedArr.length === 0 || mergedArr[mergedArr.length - 1] !== arr1[i]) {
-      mergedArr.push(arr1[i]);
-    }
-    i++;
-  }
+//   // Handle remaining elements in arr1
+//   while (i < arr1.length) {
+//     if (mergedArr.length === 0 || mergedArr[mergedArr.length - 1] !== arr1[i]) {
+//       mergedArr.push(arr1[i]);
+//     }
+//     i++;
+//   }
 
-  // Handle remaining elements in arr2
-  while (j < arr2.length) {
-    if (mergedArr.length === 0 || mergedArr[mergedArr.length - 1] !== arr2[j]) {
-      mergedArr.push(arr2[j]);
-    }
-    j++;
-  }
-  return mergedArr;
-}
+//   // Handle remaining elements in arr2
+//   while (j < arr2.length) {
+//     if (mergedArr.length === 0 || mergedArr[mergedArr.length - 1] !== arr2[j]) {
+//       mergedArr.push(arr2[j]);
+//     }
+//     j++;
+//   }
+//   return mergedArr;
+// }
 
 
 // Solution 2
-// function sortedArrUnion(arr1, arr2) {
-//   let mergedArr = [...arr1, ...arr2];
-//   return [...new Set(mergedArr)].sort((a, b) => a - b);
-// }
+function sortedArrUnion(arr1, arr2) {
+  let mergedArr = [...arr1, ...arr2];
+  return [...new Set(mergedArr)].sort((a, b) => a - b);
+}
 
 console.log(sortedArrUnion([1, 2, 3, 4, 5], [2, 3, 4, 4, 5]));
 console.log(
