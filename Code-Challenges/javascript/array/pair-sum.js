@@ -26,3 +26,19 @@ console.log(pairSum([4, 4], 8)); // [0, 1]
 
 // Time complexity: O(n^2)
 
+// Optimized solution
+const pairSumOptimized = (nums, target) => {
+  const map = {};
+  for (let i = 0; i < nums.length; i++) {
+    const diff = target - nums[i];
+    if (map[diff] !== undefined) {
+      return [map[diff], i];
+    }
+    map[nums[i]] = i;
+  }
+};
+
+console.log(pairSumOptimized([0, 7, 1, 9], 7)); // [0, 1]
+
+// Time complexity: O(n)
+
