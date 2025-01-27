@@ -50,19 +50,12 @@ function App() {
   }, [tasks]);
 
   const addNewTaskHandler = (task) => {
-    // const tempTaskList = tasks[task.category];
-    // tempTaskList.push(task);
-    // setTasks(prev => ({
-    //   ...prev,
-    //   [task.category]: tempTaskList
-    // }))
-
-    setTasks((prevTasks) => {
-      return {
-        ...prevTasks, // copy all the previous tasks
-        [task.category]: [...prevTasks[task.category], task], // add new task to the category
-      };
-    });
+    const tempTaskList = tasks[task.category];
+    tempTaskList.push(task);
+    setTasks((prev) => ({
+      ...prev,
+      [task.category]: tempTaskList,
+    }));
   };
 
   return (
@@ -142,12 +135,9 @@ const TaskList = ({ name, children }) => {
       }}
     >
       <div>
-        <p>{name.toUpperCase()}</p>
+        <p style={{ fontWeight: "bold" }}>{name.toUpperCase()}</p>
       </div>
       {children}
-      {/* <div>
-        <button>Add Task</button>
-      </div> */}
     </div>
   );
 };
