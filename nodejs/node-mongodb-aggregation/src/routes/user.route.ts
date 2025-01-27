@@ -27,9 +27,11 @@ router.get("/", async (req: Request, res: Response) => {
 router.get("/active-users", async (req: Request, res: Response) => {
   try {
     const activeUsers = await User.aggregate([
+      // STAGE 1
       {
         $match: { isActive: true },
       },
+      // STAGE 2
       {
         $count: "activeUsers", // pass any string
       },
