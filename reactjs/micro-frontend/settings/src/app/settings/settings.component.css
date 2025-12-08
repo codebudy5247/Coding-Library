@@ -1,0 +1,156 @@
+.settings-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.settings-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.framework-badge {
+    padding: 1rem;
+    background: #fff3e0;
+    border: 1px solid #ffe0b2;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.framework-badge p {
+    margin: 0.25rem 0;
+    color: #555;
+}
+
+.angular-text {
+    color: #dd0031;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.settings-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.settings-section h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+}
+
+.setting-item {
+    margin-bottom: 1rem;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: bold;
+}
+
+.setting-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: white;
+}
+
+.setting-item-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.setting-item-checkbox:hover {
+    background: #fff;
+}
+
+.setting-item-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75rem;
+    cursor: pointer;
+}
+
+.setting-item-checkbox label {
+    margin: 0;
+    cursor: pointer;
+    color: #555;
+    font-weight: normal;
+}
+
+.settings-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #dd0031;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #c50028;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.settings-info {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #e3f2fd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.settings-info p {
+    margin: 0.25rem 0;
+    color: #1976d2;
+}
+
+.settings-info .small {
+    font-size: 0.9rem;
+    color: #666;
+}

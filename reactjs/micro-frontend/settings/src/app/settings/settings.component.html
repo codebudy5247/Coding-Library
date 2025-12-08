@@ -1,0 +1,74 @@
+<div class="settings-container">
+    <div class="settings-header">
+        <h2>⚙️ Application Settings</h2>
+    </div>
+
+    <div class="framework-badge">
+        <p>Built with <strong class="angular-text">Angular</strong> 🅰️</p>
+        <p class="subtitle">This demonstrates framework-agnostic micro frontends!</p>
+    </div>
+
+    <div class="settings-section">
+        <h3>🌐 General</h3>
+
+        <div class="setting-item">
+            <label for="language">Language</label>
+            <select id="language" [(ngModel)]="settings.language" class="setting-select">
+                <option *ngFor="let lang of languages" [value]="lang.code">
+                    {{ lang.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="setting-item">
+            <label for="timezone">Timezone</label>
+            <select id="timezone" [(ngModel)]="settings.timezone" class="setting-select">
+                <option *ngFor="let tz of timezones" [value]="tz">
+                    {{ tz }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3>🔔 Notifications</h3>
+
+        <div class="setting-item-checkbox">
+            <input type="checkbox" id="emailNotifications" [(ngModel)]="settings.emailNotifications">
+            <label for="emailNotifications">Email Notifications</label>
+        </div>
+
+        <div class="setting-item-checkbox">
+            <input type="checkbox" id="pushNotifications" [(ngModel)]="settings.pushNotifications">
+            <label for="pushNotifications">Push Notifications</label>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3>🎨 Appearance & Behavior</h3>
+
+        <div class="setting-item-checkbox">
+            <input type="checkbox" id="darkMode" [(ngModel)]="settings.darkMode">
+            <label for="darkMode">Dark Mode</label>
+        </div>
+
+        <div class="setting-item-checkbox">
+            <input type="checkbox" id="autoSave" [(ngModel)]="settings.autoSave">
+            <label for="autoSave">Auto Save</label>
+        </div>
+    </div>
+
+    <div class="settings-actions">
+        <button class="btn btn-primary" (click)="saveSettings()">
+            💾 Save Settings
+        </button>
+        <button class="btn btn-secondary" (click)="resetSettings()">
+            🔄 Reset to Default
+        </button>
+    </div>
+
+    <div class="settings-info">
+        <p>✨ Your preferences are managed by this Angular micro frontend</p>
+        <p class="small">Changes are applied immediately</p>
+    </div>
+</div>
