@@ -1,0 +1,14 @@
+{
+  "name": "nodejs--streams",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "generate": "node data-generator.js",
+    "process": "node stream-processor.js",
+    "start": "npm run generate && npm run process"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
