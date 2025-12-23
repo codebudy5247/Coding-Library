@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const FILE_PATH = path.join(__dirname, 'input-data.jsonl');
+// 1. Data Generator
+const { INPUT_FILE } = require('./constants');
 const TOTAL_RECORDS = 10000;
 
 const firstNames = ['John', 'Jane', 'Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank'];
@@ -33,9 +34,9 @@ function generateRecord(id) {
     });
 }
 
-const stream = fs.createWriteStream(FILE_PATH);
+const stream = fs.createWriteStream(INPUT_FILE);
 
-console.log(`Generating ${TOTAL_RECORDS} records to ${FILE_PATH}...`);
+console.log(`Generating ${TOTAL_RECORDS} records to ${INPUT_FILE}...`);
 
 let i = 0;
 function write() {

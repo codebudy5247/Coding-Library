@@ -26,15 +26,22 @@ This project demonstrates a memory-efficient data processing pipeline using nati
     npm start
     ```
 
+## 📂 Project Structure
+*   `utils/LineSplitter.js`: Reusable Transform stream to split chunks into lines.
+*   `constants.js`: Shared file paths.
+*   `data-generator.js`: Creates dummy data.
+*   `stream-processor.js`: Filter/Transform pipeline.
+*   `http-stream-server.js`: Web server example.
+*   `stream-types.md`: Educational doc.
+
 ## 📂 Code Explanation
 
 ### 1. `data-generator.js`
 This script generates a synthetic dataset in **JSONL** (JSON Lines) format.
 - It writes records one by one to a file stream.
-- It waits for the stream to `drain` if the internal buffer fills up, ensuring we don't overwhelm memory even during generation.
 
-### 2. `stream-processor.js`
-This is the core example. It constructs a processing pipeline:
+### 1. `stream-processor.js` (Pipeline Example)
+It constructs a processing pipeline:
 
 ```mermaid
 graph LR
@@ -53,6 +60,16 @@ graph LR
     *   **Re-serializes** the data to a string.
 *   **`zlib.createGzip()`**: Built-in Node module to compress the data stream on the fly.
 *   **`WriteStream`**: Saves the final compressed data to disk.
+
+### 2. `express-server.js` (Express Server Example)
+Demonstrates how to serve large files over HTTP using Express without holding them in memory.
+
+*   Uses `readStream.pipe(res)` to send data to the client efficiently.
+*   Handles backpressure automatically: if the user's internet is slow, the server slows down reading the file.
+
+## 📚 Learn More
+I have included a detailed guide on the 4 types of streams:
+👉 **[Read Stream Types Explanation](stream-types.md)**
 
 ## Why Streams?
 If `input-data.jsonl` were 10GB, a standard `fs.readFile` would crash your application with an "Out of Memory" error. This stream implementation only keeps small chunks in memory at a time, allowing it to process petabytes of data with constant memory usage.

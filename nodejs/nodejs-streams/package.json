@@ -5,10 +5,15 @@
   "scripts": {
     "generate": "node data-generator.js",
     "process": "node stream-processor.js",
+    "serve": "node express-server.js",
+    "serve:native": "node http-stream-server.js",
     "start": "npm run generate && npm run process"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }

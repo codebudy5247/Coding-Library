@@ -4,44 +4,14 @@ const zlib = require("zlib");
 const { pipeline, Transform } = require("stream");
 const crypto = require("crypto");
 
-const INPUT_FILE = path.join(__dirname, "input-data.jsonl");
-const OUTPUT_FILE = path.join(__dirname, "output-data.jsonl.gz");
+const { INPUT_FILE, OUTPUT_FILE } = require('./constants');
+const LineSplitter = require('./utils/LineSplitter');
 
 // 1. Source: Read Stream
 // In a real app, this could be downloading a large file from S3 or an HTTP request
 const sourceStream = fs.createReadStream(INPUT_FILE, { encoding: "utf8" });
 
-/**
- * A Transform stream that buffers chunks and emits whole lines.
- * This is crucial because a chunk read from the file might end in the middle of a line/JSON.
- */
-class LineSplitter extends Transform {
-  constructor(options) {
-    super(options);
-    this.buffer = "";
-  }
 
-  _transform(chunk, encoding, callback) {
-    this.buffer += chunk.toString();
-    const lines = this.buffer.split("\n");
-
-    // The last element is either an empty string (if the chunk ended with \n)
-    // or a partial line that should be kept for the next chunk.
-    this.buffer = lines.pop(); // Keep the incomplete line
-
-    for (const line of lines) {
-      this.push(line);
-    }
-    callback();
-  }
-
-  _flush(callback) {
-    if (this.buffer) {
-      this.push(this.buffer);
-    }
-    callback();
-  }
-}
 
 /**
  * A Transform stream that:
