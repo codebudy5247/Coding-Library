@@ -1,14 +1,16 @@
+import config from '../config/env';
+
 enum LogLevel {
-  INFO = "INFO",
-  WARN = "WARN",
-  ERROR = "ERROR",
-  DEBUG = "DEBUG",
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+  DEBUG = 'DEBUG'
 }
 
 class Logger {
   private formatMessage(level: LogLevel, message: string, meta?: any): string {
     const timestamp = new Date().toISOString();
-    const metaStr = meta ? ` | ${JSON.stringify(meta)}` : "";
+    const metaStr = meta ? ` | ${JSON.stringify(meta)}` : '';
     return `[${timestamp}] [${level}] ${message}${metaStr}`;
   }
 
@@ -25,7 +27,8 @@ class Logger {
   }
 
   debug(message: string, meta?: any): void {
-    if (process.env.NODE_ENV === "development") {
+    const logLevel = config.get().logLevel.toUpperCase();
+    if (config.isDevelopment() || logLevel === 'DEBUG') {
       console.debug(this.formatMessage(LogLevel.DEBUG, message, meta));
     }
   }

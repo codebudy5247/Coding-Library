@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import { errorHandler } from './middlewares/errorHandler';
 import logger from './utils/logger';
+import config from './config/env';
 
 const app: Application = express();
 
@@ -19,10 +20,14 @@ app.use((req: Request, res: Response, next) => {
 
 // Routes
 app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok', message: 'Server is running' });
+  res.status(200).json({ 
+    status: 'ok', 
+    message: 'Server is running',
+    app: config.get().appName,
+    environment: config.get().nodeEnv,
+    timestamp: new Date().toISOString()
+  });
 });
-
-// app.use('/api/todos', todoRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

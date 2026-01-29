@@ -1,19 +1,22 @@
 import app from './app';
-// import database from './config/database'; --- IGNORE ---
+import database from './config/database';
 import logger from './utils/logger';
+import config from './config/env';
 
-const PORT = process.env.PORT || 3000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const { port, appName, nodeEnv } = config.get();
 
 async function startServer() {
   try {
     // Connect to database
-    // await database.connect(MONGO_URI);
+    await database.connect();
 
     // Start server
-    app.listen(PORT, () => {
-      logger.info(`Server is running on port ${PORT}`);
-      logger.info(`Health check: http://localhost:${PORT}/health`);
+    app.listen(port, () => {
+      logger.info(`${appName} is running`, {
+        port,
+        environment: nodeEnv
+      });
+      logger.info(`Health check: http://localhost:${port}/health`);
     });
   } catch (error) {
     logger.error('Failed to start server', error);
@@ -24,13 +27,13 @@ async function startServer() {
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
   logger.info('SIGINT received, shutting down gracefully...');
-//   await database.disconnect();
+  await database.disconnect();
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, shutting down gracefully...');
-//   await database.disconnect();
+  await database.disconnect();
   process.exit(0);
 });
 
