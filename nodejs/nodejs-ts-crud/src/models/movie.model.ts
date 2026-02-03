@@ -74,4 +74,6 @@ const MovieSchema: Schema = new Schema({
   }
 });
 
+MovieSchema.index({ title: 'text', plot: 'text', fullplot: 'text' });
+
 export default mongoose.model<IMovie>('Movies', MovieSchema);
