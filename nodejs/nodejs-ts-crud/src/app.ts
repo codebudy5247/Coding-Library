@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import { errorHandler } from './middlewares/errorHandler';
 import logger from './utils/logger';
 import config from './config/env';
+import movieRoutes from './routes/movie.routes';
 
 const app: Application = express();
 
@@ -11,23 +12,25 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req: Request, res: Response, next) => {
-  logger.info(`${req.method} ${req.path}`, { 
+  logger.info(`${req.method} ${req.path}`, {
     body: req.body,
-    query: req.query 
+    query: req.query
   });
   next();
 });
 
 // Routes
 app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ 
-    status: 'ok', 
+  res.status(200).json({
+    status: 'ok',
     message: 'Server is running',
     app: config.get().appName,
     environment: config.get().nodeEnv,
     timestamp: new Date().toISOString()
   });
 });
+
+app.use('/api/movies', movieRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
